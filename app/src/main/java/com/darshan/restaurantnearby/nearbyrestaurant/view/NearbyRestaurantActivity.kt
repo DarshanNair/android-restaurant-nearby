@@ -59,7 +59,7 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
         this.googleMap.uiSettings.isMapToolbarEnabled = false
         setMyLocationEnabled()
 
-        googleMap.setOnCameraMoveListener { handleOnCameraIdleState() }
+        googleMap.setOnCameraIdleListener { handleOnCameraIdleState() }
         googleMap.setOnInfoWindowClickListener { marker ->
             startActivity(
                 RestaurantDetailActivity.getStartIntent(
@@ -135,7 +135,8 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun handleOnCameraIdleState() {
-        /*nearbyRestaurantViewModel.loadNearbyRestaurants(googleMap.projection.visibleRegion.)*/
+        val midLatLng = googleMap.cameraPosition.target
+        nearbyRestaurantViewModel.loadNearbyRestaurants(midLatLng.latitude, midLatLng.longitude)
     }
 
     private fun setContent(venues: List<NearbyRestaurant.Venue>) {
