@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">android-restaurant-nearby</string>
+
+    <!-- Restaurant Detail Activity -->
+    <string name="detail_activity_name">Name =</string>
+    <string name="detail_activity_phone">Phone =</string>
+    <string name="detail_activity_twitter">Twitter =</string>
+    <string name="detail_activity_facebook">Facebook =</string>
+    <string name="detail_activity_address">Address =</string>
+    <string name="detail_activity_cross_street">Cross Street =</string>
+    <string name="general_error_state_message_something_wrong">Sorry, something went wrong</string>
+    <string name="general_error_state_message_try_again">Please try again later.</string>
+
+</resources>
