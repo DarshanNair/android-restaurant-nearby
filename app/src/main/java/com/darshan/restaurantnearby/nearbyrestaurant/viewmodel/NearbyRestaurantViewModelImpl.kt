@@ -18,17 +18,13 @@ class NearbyRestaurantViewModelImpl @Inject internal constructor(
 
     override fun state(): LiveData<State> = stateLiveData
 
-    override fun loadNearbyRestaurants(currentLatLong: String) {
+    override fun loadNearbyRestaurants(latitude: Double, longitude: Double) {
         stateLiveData.value = State.Loading
-        loadNearbyRestaurantUseCase.execute(currentLatLong)
+        loadNearbyRestaurantUseCase.execute("$latitude,$longitude")
     }
 
     override fun onNearbyRestaurantFetchSuccess(nearbyRestaurantsData: NearbyRestaurant.Data) {
-        if (nearbyRestaurantsData.response.venues.isEmpty()) {
-            stateLiveData.value = State.Empty
-        } else {
-            stateLiveData.value = State.Success(nearbyRestaurantsData)
-        }
+        stateLiveData.value = State.Success(nearbyRestaurantsData.response.venues)
     }
 
     override fun onNearbyRestaurantFetchError(throwable: Throwable) {

@@ -9,7 +9,7 @@ abstract class RestaurantDetailViewModel : ViewModel(), LoadRestaurantDetailUseC
 
     sealed class State {
         object Loading : State()
-        data class Success(val restaurantDetailData: RestaurantDetail.Data) : State()
+        data class Success(val venue: RestaurantDetail.Venue) : State()
         object Empty : State()
         object Error : State()
     }

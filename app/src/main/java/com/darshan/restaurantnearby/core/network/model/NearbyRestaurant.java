@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 @AutoValue
 public abstract class NearbyRestaurant {
 
@@ -57,6 +59,10 @@ public abstract class NearbyRestaurant {
         public static TypeAdapter<Location> typeAdapter(Gson gson) {
             return new AutoValue_NearbyRestaurant_Location.GsonTypeAdapter(gson);
         }
+
+        @Nullable
+        @SerializedName("address")
+        public abstract String getAddress();
 
         @SerializedName("lat")
         public abstract double getLatitude();

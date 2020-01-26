@@ -24,7 +24,7 @@ class RestaurantDetailViewModelImpl @Inject internal constructor(
     }
 
     override fun onRestaurantDetailFetchSuccess(restaurantDetailData: RestaurantDetail.Data) {
-        stateLiveData.value = State.Success(restaurantDetailData)
+        stateLiveData.value = State.Success(restaurantDetailData.response.venue)
     }
 
     override fun onRestaurantDetailFetchError(throwable: Throwable) {

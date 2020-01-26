@@ -9,13 +9,12 @@ abstract class NearbyRestaurantViewModel : ViewModel(), LoadNearbyRestaurantUseC
 
     sealed class State {
         object Loading : State()
-        data class Success(val nearbyRestaurantData: NearbyRestaurant.Data) : State()
-        object Empty : State()
+        data class Success(val venues: List<NearbyRestaurant.Venue>) : State()
         object Error : State()
     }
 
     abstract fun state(): LiveData<State>
 
-    abstract fun loadNearbyRestaurants(currentLatLong: String)
+    abstract fun loadNearbyRestaurants(latitude: Double, longitude: Double)
 
 }

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -34,6 +35,11 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
 
+    companion object {
+        private const val REQUEST_LOCATION_APP_PERMISSION = 4
+        private const val CAMERA_ZOOM_LEVEL = 10.0F
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
@@ -48,27 +54,6 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
         initializeMap()
     }
 
-    private fun onNearbyRestaurantsLoaded(state: State) {
-        when (state) {
-            State.Loading -> {
-                progress_bar.visibility = View.VISIBLE
-            }
-            is State.Success -> {
-                progress_bar.visibility = View.GONE
-                setContent(state.nearbyRestaurantData)
-            }
-            State.Empty -> {
-            }
-            State.Error -> {
-            }
-        }
-    }
-
-    private fun initializeMap() {
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
-        mapFragment?.getMapAsync(this)
-    }
-
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         this.googleMap.uiSettings.isMapToolbarEnabled = false
@@ -79,15 +64,57 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(
                 RestaurantDetailActivity.getStartIntent(
                     this@NearbyRestaurantActivity,
-                    marker.snippet
+                    marker.tag as String
                 )
             )
             marker.hideInfoWindow()
         }
     }
 
-    companion object {
-        private const val REQUEST_LOCATION_APP_PERMISSION = 4
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_LOCATION_APP_PERMISSION -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setMyLocationEnabled()
+                } else {
+                    Toast.makeText(
+                        this,
+                        R.string.general_error_state_message_something_wrong,
+                        Toast.LENGTH_LONG
+                    ).show();
+                }
+                return
+            }
+        }
+    }
+
+    private fun onNearbyRestaurantsLoaded(state: State) {
+        when (state) {
+            State.Loading -> {
+                progress_bar.visibility = View.VISIBLE
+            }
+            is State.Success -> {
+                progress_bar.visibility = View.GONE
+                setContent(state.venues)
+            }
+            State.Error -> {
+                progress_bar.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    R.string.general_error_state_message_something_wrong,
+                    Toast.LENGTH_LONG
+                ).show();
+            }
+        }
+    }
+
+    private fun initializeMap() {
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
+        mapFragment?.getMapAsync(this)
     }
 
     private fun setMyLocationEnabled() {
@@ -107,51 +134,34 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            REQUEST_LOCATION_APP_PERMISSION -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setMyLocationEnabled()
-                } else {
-                }
-                return
-            }
-        }
-    }
-
     private fun handleOnCameraIdleState() {
         /*nearbyRestaurantViewModel.loadNearbyRestaurants(googleMap.projection.visibleRegion.)*/
     }
 
-    private fun setContent(nearbyRestaurantData: NearbyRestaurant.Data) {
+    private fun setContent(venues: List<NearbyRestaurant.Venue>) {
         val markerOptions = MarkerOptions()
-        for (venue in nearbyRestaurantData.response.venues) {
+        for (venue in venues) {
             val latLng = LatLng(venue.location.latitude, venue.location.longitude)
             markerOptions.position(latLng)
             markerOptions.title(venue.name)
-            markerOptions.snippet(venue.id)
+            markerOptions.snippet(venue.location.address)
             markerOptions.infoWindowAnchor(0.5f, 2.7f)
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_marker))
-            googleMap.addMarker(markerOptions)
+            val marker = googleMap.addMarker(markerOptions)
+            marker.tag = venue.id.orEmpty()
         }
     }
 
     private fun findNearbyRestaurantsOnLaunch() {
         val location = geoLocationManager.getLastLocation()
         if (location != null) {
-            googleMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(location.latitude, location.longitude),
-                    15.0f
-                )
+            nearbyRestaurantViewModel.loadNearbyRestaurants(location.latitude, location.longitude)
+            val point = CameraUpdateFactory.newLatLngZoom(
+                LatLng(location.latitude, location.longitude),
+                CAMERA_ZOOM_LEVEL
             )
-            nearbyRestaurantViewModel.loadNearbyRestaurants("" + location.latitude + "," + location.longitude)
+            googleMap.animateCamera(point)
         }
     }
-
 
 }

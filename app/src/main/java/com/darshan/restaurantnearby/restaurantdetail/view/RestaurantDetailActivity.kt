@@ -55,23 +55,19 @@ class RestaurantDetailActivity : AppCompatActivity() {
             State.Loading -> view_flipper_restaurant_detail.displayedChild = UIState.LOADING.ordinal
             is State.Success -> {
                 view_flipper_restaurant_detail.displayedChild = UIState.LOADED.ordinal
-                setData(state.restaurantDetailData)
+                setData(state.venue)
             }
             State.Error -> view_flipper_restaurant_detail.displayedChild = UIState.ERROR.ordinal
         }
     }
 
-    private fun setData(restaurantDetailData: RestaurantDetail.Data) {
-        with(restaurantDetailData.response.venue) {
-            venue_name.text = restaurantDetailData.response.venue.name.orEmpty()
-            venue_phone.text = restaurantDetailData.response.venue.contact?.phone.orEmpty()
-            venue_twitter.text = restaurantDetailData.response.venue.contact?.twitter.orEmpty()
-            venue_facebook.text =
-                restaurantDetailData.response.venue.contact?.facebookName.orEmpty()
-            venue_address.text = restaurantDetailData.response.venue.location?.address.orEmpty()
-            venue_cross_street.text =
-                restaurantDetailData.response.venue.location?.crossStreet.orEmpty()
-        }
+    private fun setData(venue: RestaurantDetail.Venue) {
+        venue_name.text = venue.name.orEmpty()
+        venue_phone.text = venue.contact?.phone.orEmpty()
+        venue_twitter.text = venue.contact?.twitter.orEmpty()
+        venue_facebook.text = venue.contact?.facebookName.orEmpty()
+        venue_address.text = venue.location?.address.orEmpty()
+        venue_cross_street.text = venue.location?.crossStreet.orEmpty()
     }
 
 }
