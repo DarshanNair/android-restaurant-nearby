@@ -35,6 +35,9 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
 
+    //whether map move initiated by user or api
+    private var isCameraMoveAuto = false
+
     companion object {
         private const val REQUEST_LOCATION_APP_PERMISSION = 4
         private const val CAMERA_ZOOM_LEVEL = 10.0F
@@ -135,8 +138,11 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun handleOnCameraIdleState() {
-        val midLatLng = googleMap.cameraPosition.target
-        nearbyRestaurantViewModel.loadNearbyRestaurants(midLatLng.latitude, midLatLng.longitude)
+        if(!isCameraMoveAuto) {
+            val midLatLng = googleMap.cameraPosition.target
+            nearbyRestaurantViewModel.loadNearbyRestaurants(midLatLng.latitude, midLatLng.longitude)
+        }
+        isCameraMoveAuto = false
     }
 
     private fun setContent(venues: List<NearbyRestaurant.Venue>) {
@@ -157,6 +163,7 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
         val location = geoLocationManager.getLastLocation()
         if (location != null) {
             nearbyRestaurantViewModel.loadNearbyRestaurants(location.latitude, location.longitude)
+            isCameraMoveAuto = true
             val point = CameraUpdateFactory.newLatLngZoom(
                 LatLng(location.latitude, location.longitude),
                 CAMERA_ZOOM_LEVEL
