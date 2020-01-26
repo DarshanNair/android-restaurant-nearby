@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
 @AutoValue
 public abstract class RestaurantDetail {
@@ -40,12 +40,15 @@ public abstract class RestaurantDetail {
             return new AutoValue_RestaurantDetail_Venue.GsonTypeAdapter(gson);
         }
 
+        @Nullable
         @SerializedName("name")
         public abstract String getName();
 
+        @Nullable
         @SerializedName("contact")
         public abstract Contact getContact();
 
+        @Nullable
         @SerializedName("location")
         public abstract Location getLocation();
 
@@ -58,12 +61,15 @@ public abstract class RestaurantDetail {
             return new AutoValue_RestaurantDetail_Contact.GsonTypeAdapter(gson);
         }
 
+        @Nullable
         @SerializedName("phone")
         public abstract String getPhone();
 
+        @Nullable
         @SerializedName("twitter")
         public abstract String getTwitter();
 
+        @Nullable
         @SerializedName("facebookName")
         public abstract String getFacebookName();
 
@@ -76,9 +82,11 @@ public abstract class RestaurantDetail {
             return new AutoValue_RestaurantDetail_Location.GsonTypeAdapter(gson);
         }
 
+        @Nullable
         @SerializedName("address")
         public abstract String getAddress();
 
+        @Nullable
         @SerializedName("crossStreet")
         public abstract String getCrossStreet();
 

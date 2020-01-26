@@ -19,7 +19,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_nearby_restaurant.*
@@ -77,7 +76,12 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.setOnCameraMoveListener { handleOnCameraIdleState() }
         googleMap.setOnInfoWindowClickListener { marker ->
-            startActivity(RestaurantDetailActivity.getStartIntent(this@NearbyRestaurantActivity, marker.snippet))
+            startActivity(
+                RestaurantDetailActivity.getStartIntent(
+                    this@NearbyRestaurantActivity,
+                    marker.snippet
+                )
+            )
             marker.hideInfoWindow()
         }
     }
@@ -87,7 +91,11 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setMyLocationEnabled() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             googleMap.isMyLocationEnabled = true
             findNearbyRestaurantsOnLaunch()
         } else {
@@ -99,7 +107,11 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             REQUEST_LOCATION_APP_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

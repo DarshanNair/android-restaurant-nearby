@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import com.darshan.restaurantnearby.core.injection.scopes.PerActivity
 import com.darshan.restaurantnearby.nearbyrestaurant.view.NearbyRestaurantActivity
-import com.darshan.restaurantnearby.nearbyrestaurant.viewmodel.NearbyRestaurantViewModelFactory
 import com.darshan.restaurantnearby.restaurantdetail.domain.injection.LoadRestaurantDetailUseCaseModule
 import com.darshan.restaurantnearby.restaurantdetail.view.RestaurantDetailActivity
 import com.darshan.restaurantnearby.restaurantdetail.viewmodel.RestaurantDetailViewModel

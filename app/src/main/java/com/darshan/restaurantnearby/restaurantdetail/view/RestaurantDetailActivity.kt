@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.darshan.restaurantnearby.R
 import com.darshan.restaurantnearby.core.network.model.RestaurantDetail
-import com.darshan.restaurantnearby.restaurantdetail.viewmodel.RestaurantDetailViewModel.State
 import com.darshan.restaurantnearby.restaurantdetail.viewmodel.RestaurantDetailViewModel
+import com.darshan.restaurantnearby.restaurantdetail.viewmodel.RestaurantDetailViewModel.State
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_restaurant_detail.*
 import kotlinx.android.synthetic.main.view_restaurant_detail_loaded.*
@@ -41,7 +41,9 @@ class RestaurantDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_restaurant_detail)
 
         restaurantDetailViewModel.apply {
-            state().observe(this@RestaurantDetailActivity, Observer { it?.let { onRestaurantDetailLoaded(it) } })
+            state().observe(
+                this@RestaurantDetailActivity,
+                Observer { it?.let { onRestaurantDetailLoaded(it) } })
             loadRestaurantDetail(getID())
         }
     }
@@ -61,12 +63,14 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
     private fun setData(restaurantDetailData: RestaurantDetail.Data) {
         with(restaurantDetailData.response.venue) {
-            venue_name.text = restaurantDetailData.response.venue.name
-            venue_phone.text = restaurantDetailData.response.venue.contact.phone
-            venue_twitter.text = restaurantDetailData.response.venue.contact.twitter
-            venue_facebook.text = restaurantDetailData.response.venue.contact.facebookName
-            venue_address.text = restaurantDetailData.response.venue.location.address
-            venue_cross_street.text = restaurantDetailData.response.venue.location.crossStreet
+            venue_name.text = restaurantDetailData.response.venue.name.orEmpty()
+            venue_phone.text = restaurantDetailData.response.venue.contact?.phone.orEmpty()
+            venue_twitter.text = restaurantDetailData.response.venue.contact?.twitter.orEmpty()
+            venue_facebook.text =
+                restaurantDetailData.response.venue.contact?.facebookName.orEmpty()
+            venue_address.text = restaurantDetailData.response.venue.location?.address.orEmpty()
+            venue_cross_street.text =
+                restaurantDetailData.response.venue.location?.crossStreet.orEmpty()
         }
     }
 
