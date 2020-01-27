@@ -2,7 +2,7 @@
 
 ## Covered As part of this project
 - Clean architecture with MVVM
-- 100% Kotlin code (except 1 AutoValue model class)
+- 100% Kotlin code (except AutoValue model classes)
 - Android arch components - ViewModel, LiveData, etc
 - Rx for async calls
 - Dagger for dependency injection
