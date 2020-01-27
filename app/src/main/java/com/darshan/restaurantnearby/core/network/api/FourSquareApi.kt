@@ -12,19 +12,13 @@ interface FourSquareApi {
     @GET("search")
     fun getNearbyRestaurants(
         @Query("ll", encoded = true) ll: String,
-        @Query("v") v: String = "20130815",
-        @Query("intent") intent: String = "checkin",
-        @Query("categoryId") categoryId: String = "4d4b7105d754a06374d81259",
-        @Query("client_id") client_id: String = "C5UATRQ4YHCUKOODPTLNWC1ALUT33WNB5BR1SEVAPRW4A140",
-        @Query("client_secret") client_secret: String = "PO00FLMNZKOETZO3IOXLQLFA53BKJIVHD3IXFVWH24YJS5SY"
+        @Query("intent") intent: String,
+        @Query("categoryId") categoryId: String
     ): Single<NearbyRestaurant.Data>
 
     @GET("{id}")
     fun getRestaurantDetail(
-        @Path("id") id: String,
-        @Query("v") v: String = "20130815",
-        @Query("client_id") client_id: String = "C5UATRQ4YHCUKOODPTLNWC1ALUT33WNB5BR1SEVAPRW4A140",
-        @Query("client_secret") client_secret: String = "PO00FLMNZKOETZO3IOXLQLFA53BKJIVHD3IXFVWH24YJS5SY"
+        @Path("id") id: String
     ): Single<RestaurantDetail.Data>
 
 }

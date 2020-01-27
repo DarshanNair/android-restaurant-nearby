@@ -2,8 +2,6 @@ package com.darshan.restaurantnearby.core.injection
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
-import com.darshan.restaurantnearby.BuildConfig
 import com.darshan.restaurantnearby.core.injection.qualifiers.ForApplication
 import com.darshan.restaurantnearby.core.injection.qualifiers.ForIoThread
 import com.darshan.restaurantnearby.core.injection.qualifiers.ForMainThread
@@ -34,10 +32,5 @@ class BaseModule {
     @PerApplication
     @ForMainThread
     fun provideMainScheduler(): Scheduler = AndroidSchedulers.mainThread()
-
-    @Provides
-    @PerApplication
-    fun provideSharedPreferences(application: Application): SharedPreferences =
-        application.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
 
 }

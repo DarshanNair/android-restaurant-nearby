@@ -34,6 +34,7 @@ Each feature *package* will follow - Clean architecture with MVVM.
 
 #### Networking
 * Networking is provided using Retrofit interface `FourSquareApi` in *core/network/api* package
+* Have used an interceptor(AddClientKeyInterceptor) to add Foursquare's client secret key, id and version to every request
 
 #### Model
 * can be found in *core/network/model* package

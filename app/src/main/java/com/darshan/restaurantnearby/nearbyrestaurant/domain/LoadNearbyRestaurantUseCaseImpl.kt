@@ -19,9 +19,14 @@ class LoadNearbyRestaurantUseCaseImpl @Inject constructor(
 
     private var callback: Callback? = null
 
+    companion object {
+        private const val INTENT_VALUE = "checkin"
+        private const val FOOD_CATEGORY_VALUE = "4d4b7105d754a06374d81259"
+    }
+
     override fun execute(currentLatLong: String) {
         trackDisposable(
-            loadNearbyRestaurantRepository.getNearbyRestaurant(currentLatLong)
+            loadNearbyRestaurantRepository.getNearbyRestaurant(currentLatLong, INTENT_VALUE, FOOD_CATEGORY_VALUE)
                 .subscribeOn(ioScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(::onSuccess, ::onError)

@@ -5,6 +5,10 @@ import io.reactivex.Single
 
 interface LoadNearbyRestaurantRepository {
 
-    fun getNearbyRestaurant(currentLatLong: String): Single<NearbyRestaurant.Data>
+    fun getNearbyRestaurant(
+        currentLatLong: String,
+        intent: String,
+        categoryId: String
+    ): Single<NearbyRestaurant.Data>
 
 }

@@ -3,6 +3,7 @@ package com.darshan.restaurantnearby.core.network.api.injection
 import android.content.Context
 import com.darshan.restaurantnearby.core.injection.qualifiers.ForApplication
 import com.darshan.restaurantnearby.core.injection.scopes.PerApplication
+import com.darshan.restaurantnearby.core.network.api.AddClientKeyInterceptor
 import com.darshan.restaurantnearby.core.network.api.AutoValueTypeAdapterFactory
 import com.darshan.restaurantnearby.core.network.api.FourSquareApi
 import com.google.gson.Gson
@@ -54,7 +55,7 @@ class FourSquareApiModule {
 
     @Provides
     @PerApplication
-    fun provideOkHttpClientBuilder(cache: Cache): OkHttpClient.Builder {
+    fun provideOkHttpClientBuilder(cache: Cache, addClientKeyInterceptor: AddClientKeyInterceptor): OkHttpClient.Builder {
         return OkHttpClient().newBuilder()
             .followRedirects(true)
             .followSslRedirects(true)
@@ -62,6 +63,7 @@ class FourSquareApiModule {
             .cache(cache)
             .connectTimeout(10L, TimeUnit.SECONDS)
             .readTimeout(30L, TimeUnit.SECONDS)
+            .addInterceptor(addClientKeyInterceptor)
     }
 
     @Provides

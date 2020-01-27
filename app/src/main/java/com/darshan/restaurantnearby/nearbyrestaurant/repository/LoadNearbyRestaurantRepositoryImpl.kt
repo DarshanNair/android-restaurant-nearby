@@ -9,7 +9,11 @@ class LoadNearbyRestaurantRepositoryImpl @Inject constructor(
     private val fourSquareApi: FourSquareApi
 ) : LoadNearbyRestaurantRepository {
 
-    override fun getNearbyRestaurant(currentLatLong: String): Single<NearbyRestaurant.Data> =
-        fourSquareApi.getNearbyRestaurants(currentLatLong)
+    override fun getNearbyRestaurant(
+        currentLatLong: String,
+        intent: String,
+        categoryId: String
+    ): Single<NearbyRestaurant.Data> =
+        fourSquareApi.getNearbyRestaurants(currentLatLong, intent, categoryId)
 
 }

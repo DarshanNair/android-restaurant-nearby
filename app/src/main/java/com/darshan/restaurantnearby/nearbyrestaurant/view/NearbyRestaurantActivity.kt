@@ -35,7 +35,7 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
 
-    //whether map move initiated by user or api
+    //whether map move initiated by user or api/system
     private var isCameraMoveAuto = false
 
     companion object {
@@ -49,10 +49,7 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
         setContentView(R.layout.activity_nearby_restaurant)
 
-        nearbyRestaurantViewModel.state().observe(
-            this@NearbyRestaurantActivity,
-            Observer { it?.let { onNearbyRestaurantsLoaded(it) } }
-        )
+        nearbyRestaurantViewModel.state().observe(this@NearbyRestaurantActivity, Observer { it?.let { onNearbyRestaurantsLoaded(it) } })
 
         initializeMap()
     }
@@ -64,31 +61,18 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
 
         googleMap.setOnCameraIdleListener { handleOnCameraIdleState() }
         googleMap.setOnInfoWindowClickListener { marker ->
-            startActivity(
-                RestaurantDetailActivity.getStartIntent(
-                    this@NearbyRestaurantActivity,
-                    marker.tag as String
-                )
-            )
+            startActivity(RestaurantDetailActivity.getStartIntent(this@NearbyRestaurantActivity, marker.tag as String))
             marker.hideInfoWindow()
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             REQUEST_LOCATION_APP_PERMISSION -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setMyLocationEnabled()
                 } else {
-                    Toast.makeText(
-                        this,
-                        R.string.general_error_state_message_something_wrong,
-                        Toast.LENGTH_LONG
-                    ).show();
+                    Toast.makeText(this, R.string.general_error_state_message_something_wrong, Toast.LENGTH_LONG).show();
                 }
                 return
             }
@@ -106,11 +90,7 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             State.Error -> {
                 progress_bar.visibility = View.GONE
-                Toast.makeText(
-                    this,
-                    R.string.general_error_state_message_something_wrong,
-                    Toast.LENGTH_LONG
-                ).show();
+                Toast.makeText(this, R.string.general_error_state_message_something_wrong, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -121,19 +101,11 @@ class NearbyRestaurantActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setMyLocationEnabled() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             googleMap.isMyLocationEnabled = true
             findNearbyRestaurantsOnLaunch()
         } else {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_APP_PERMISSION
-            )
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_APP_PERMISSION)
         }
     }
 

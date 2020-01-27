@@ -41,9 +41,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_restaurant_detail)
 
         restaurantDetailViewModel.apply {
-            state().observe(
-                this@RestaurantDetailActivity,
-                Observer { it?.let { onRestaurantDetailLoaded(it) } })
+            state().observe(this@RestaurantDetailActivity, Observer { it?.let { onRestaurantDetailLoaded(it) } })
             loadRestaurantDetail(getID())
         }
     }
